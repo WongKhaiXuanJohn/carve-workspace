@@ -76,7 +76,10 @@ export function initHeater(root) {
         // Sort committed time edits, keeping the same input node and its identity.
         input.addEventListener('change', () => { item.time = input.value; renderTimes(); update(); });
         input.addEventListener('blur', () => { renderTimes(); });
-        label.append(title, input);
+        const frame = document.createElement('span');
+        frame.className = 'temporal-input';
+        frame.append(input);
+        label.append(title, frame);
         const remove = document.createElement('button');
         remove.type = 'button';
         remove.className = 'remove-class';

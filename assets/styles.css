@@ -194,14 +194,14 @@ button:focus-visible,a:focus-visible{outline:2px solid #987445;outline-offset:4p
 .heater-layout{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:26px;align-items:start}
 .heater-panel{background:#fffcf7;border:1px solid #ddd4c6;border-radius:8px;padding:25px;min-width:0}
 .heater-panel h2{font-size:21px;font-weight:400;letter-spacing:-.035em;margin:0 0 19px}
-.field-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.heater-field{display:grid;gap:8px;font:12px/1.5 Muli,Arial,sans-serif;color:#51463c;margin-bottom:20px}
+.field-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.heater-field{display:grid;gap:8px;min-width:0;font:12px/1.5 Muli,Arial,sans-serif;color:#51463c;margin-bottom:20px}
 .heater-field small{font-size:11px;color:#807365;line-height:1.6}
 .heater-field input,.class-field input{width:100%;min-width:0;height:46px;border:1px solid #d4cabb;background:#fffefb;border-radius:4px;padding:0 11px;color:#302a24;font:14px Muli,Arial,sans-serif}
 .heater-field input:focus,.class-field input:focus{outline:2px solid #8d745c;outline-offset:2px}
-.class-row{display:flex;align-items:end;gap:10px;margin:0 0 12px}
+.class-row{display:grid;grid-template-columns:minmax(0,1fr) 44px;align-items:end;gap:10px;margin:0 0 12px}
 .class-field{display:grid;gap:6px;flex:1;min-width:0;font:11px/1.5 Muli,Arial,sans-serif;color:#75695c}
-.remove-class{width:42px;height:46px;flex-shrink:0;border:1px solid #ded1c1;background:#faf5ed;color:#947354;font-size:22px;border-radius:4px;cursor:pointer}
+.remove-class{width:44px;height:46px;flex-shrink:0;border:1px solid #ded1c1;background:#faf5ed;color:#947354;font-size:22px;border-radius:4px;cursor:pointer}
 .remove-class:disabled{opacity:.3;cursor:default}
 .add-class{width:100%;min-height:46px;border:1px dashed #b7a991;background:#f8f4ed;color:#6d5842;font:12px Muli,Arial,sans-serif;border-radius:4px;cursor:pointer;margin:5px 0 20px}
 .heater-submit{width:100%;min-height:48px;font-size:12px;cursor:pointer}
@@ -335,8 +335,18 @@ button:disabled,[aria-disabled=true]{opacity:.45;cursor:not-allowed}
 .receipt-dialog h2{font-size:26px;font-weight:400;letter-spacing:-.04em;margin:0 0 16px}
 .receipt-dialog p{font:12px/1.8 Muli,Arial,sans-serif;color:#7c6a56;margin:0 0 24px}
 .receipt-print{display:none}
+/* iOS date/time controls add their own padding to width:100% (WebKit 301648).
+   Keep native picker inputs unpadded; a normal CSS frame owns their spacing. */
+.temporal-input{display:flex;align-items:center;gap:0;width:100%;min-width:0;max-width:100%;height:46px;padding:0 11px;box-sizing:border-box;border:1px solid #d4cabb;border-radius:4px;background:#fffefb}
+.temporal-input input[type=date],.temporal-input input[type=time]{display:inline-flex;align-items:center;flex:1 1 0%;box-sizing:border-box;width:100%;min-width:0;max-width:100%;height:44px;margin:0;padding:0;border:0;border-radius:0;background:transparent;-webkit-appearance:none;appearance:none}
+.temporal-input:focus-within{outline:2px solid #8d745c;outline-offset:2px}
+.temporal-input input:focus{outline:none}
+.temporal-input:has([aria-invalid=true]){border-color:#a14732}
+.temporal-input input::-webkit-date-and-time-value{min-width:0;text-align:left}
+.temporal-input input::-webkit-datetime-edit{padding:0}
 @media(max-width:1150px){.receipt-layout{grid-template-columns:1fr}.receipt-preview-area{max-width:650px;width:100%;margin:auto}.receipt-panel{padding:24px}}
 @media(max-width:760px){.receipt-outlets{grid-template-columns:1fr;gap:10px}.receipt-outlet-card{padding:18px}.receipt-outlet-card strong{font-size:21px}.receipt-layout{gap:30px}.receipt-panel{padding:20px}.receipt-paper{padding:28px 20px}.receipt-paper-header{gap:12px}.receipt-paper-header img{width:102px}.receipt-paper-header h2{font-size:30px}.receipt-paper-header p{font-size:9px}.receipt-parties{grid-template-columns:1fr;gap:22px}.receipt-table{font-size:9px}.receipt-actions{flex-direction:column}.receipt-actions .action{width:100%}.receipt-outlets legend{font-size:12px}.receipt-totals .receipt-grand-total{font-size:15px}.receipt-grand-total strong:last-child{font-size:18px}}
+@media(max-width:760px){.heater-field input,.class-field input,.receipt-field input,.receipt-field textarea{font-size:16px}}
 @media print{
   @page{size:A4;margin:16mm}
   body.printing-receipt{background:#fff}
