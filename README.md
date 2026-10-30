@@ -46,7 +46,7 @@ The operating rules and normal generated message were migrated from [carve-lab-h
 - `assets/heater-ui.js`: the integrated heater form and copy/share actions.
 - `tests/heater.test.js`: scheduling, message compatibility, validation, and day-boundary checks.
 
-Module links use URL hashes, so bookmarked tools and browser Back/Forward work on GitHub Pages. Assets use relative paths for repository-based hosting.
+Module links use URL hashes, so bookmarked tools and browser Back/Forward work on GitHub Pages. Assets use relative paths for repository-based hosting. The stylesheet link includes a content-version query to refresh cached styling; update that version when changing the CSS.
 
 ## Publish
 
