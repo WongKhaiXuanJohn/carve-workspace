@@ -244,3 +244,8 @@ button:disabled,[aria-disabled=true]{opacity:.45;cursor:not-allowed}
 
 
 .gallery-pause-accessible:focus-visible{position:absolute;width:auto;height:auto;margin:0;clip:auto;white-space:normal;overflow:visible;left:16px;top:16px;z-index:5;padding:10px 14px;border:1px solid #fffaf2;border-radius:3px;background:#3c352f;color:#fffaf2;font:12px Arial,sans-serif;outline:2px solid #fffaf2;outline-offset:3px}
+
+.photo.heater-photo{width:100%;height:auto;aspect-ratio:3.2/1;min-height:0;max-height:none;margin:0 0 30px;background:#e9e3d6;overflow:hidden;border-radius:2px}
+.heater-photo img{object-position:50% 48%}
+.heater-photo figcaption{left:18px;right:auto;bottom:18px;background:none;backdrop-filter:none;padding:0;z-index:2;display:flex;flex-direction:column;gap:7px;font-size:11px;letter-spacing:.12em}
+@media(max-width:760px){.photo.heater-photo{aspect-ratio:2.2/1;margin-bottom:24px}}
