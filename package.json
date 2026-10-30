@@ -1,0 +1,11 @@
+{
+  "name": "carve-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A unified workspace for Carve and Carve Labs",
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check assets/app.js && node --check assets/gallery.js && node --check assets/heater.js && node --check assets/heater-ui.js && node --check assets/modules.js"
+  }
+}
