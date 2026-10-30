@@ -1,10 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-const api = await import('../assets/receipt.js').catch(error => {
-  if (error.code === 'ERR_MODULE_NOT_FOUND') return {};
-  throw error;
-});
+import * as api from '../assets/receipt.js';
 const draft = (patch = {}) => ({ outlet: 'carve', date: '2026-10-30', clientName: 'Alex Tan',
   phone: '', email: '', items: [{ description: 'Class pack', quantity: '1', price: '100.00' }], ...patch });
 
