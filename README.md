@@ -4,7 +4,7 @@ A shared home for Carve and Carve Labs, built as one public website with one sou
 
 ## Tools
 
-- **Overview:** studio photography, automatic eight-second crossfades, and tool navigation.
+- **Overview:** studio photography, automatic four-second crossfades, and tool navigation.
 - **Heater Schedule:** integrated class-time inputs, heater instructions, copy, and WhatsApp draft preparation. Switching tools stays inside this app.
 - **Bank Reconciliation:** coming soon.
 - **Future Tools:** coming soon.

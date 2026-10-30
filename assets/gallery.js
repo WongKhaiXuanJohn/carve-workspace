@@ -32,7 +32,7 @@ export function initGallery(root) {
     control.textContent = paused ? 'Resume photo switching' : 'Pause photo switching';
     control.setAttribute('aria-label', paused ? 'Resume automatic photo switching' : 'Pause automatic photo switching');
     control.setAttribute('aria-pressed', String(paused));
-    if (active && !paused && !document.hidden) timer = window.setInterval(advance, 8000);
+    if (active && !paused && !document.hidden) timer = window.setInterval(advance, 4000);
   }
 
   slides.forEach((slide, i) => {
