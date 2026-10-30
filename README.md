@@ -6,6 +6,7 @@ A shared home for Carve and Carve Labs, built as one public website with one sou
 
 - **Overview:** studio photography, automatic four-second crossfades, and tool navigation.
 - **Heater Schedule:** integrated class-time inputs, heater instructions, copy, and WhatsApp draft preparation. Switching tools stays inside this app.
+- **Receipt:** choose either outlet, enter a required client name and one or more purchases, then download a PDF or print. Prices exclude SST; the subtotal, 8% SST and total are shown separately. Phone and email are optional. The date defaults to the generation day in Malaysia and can be changed; **Use today** restores the automatic date. No receipt numbers or database are used.
 - **Bank Reconciliation:** coming soon.
 - **Future Tools:** coming soon.
 
@@ -35,7 +36,7 @@ npm test
 - Class fields automatically sort from earliest to latest when a time edit is completed, with unfinished entries kept last.
 - Classes must start at least 60 minutes apart. Events crossing midnight explicitly identify the adjacent day.
 
-The operating rules and normal generated message were migrated from [carve-lab-heater-scheduler](https://github.com/WongKhaiXuanJohn/carve-lab-heater-scheduler), commit `cb60d1ee2ff6f06cbe6e84f2626108b980314df9`. The original is retained as a test fixture so future changes can be checked against it. No external scheduler is required by this application.
+The operating rules and normal generated message were migrated from the former carve-lab-heater-scheduler repository, commit `cb60d1ee2ff6f06cbe6e84f2626108b980314df9`. The [original source](tests/fixtures/original-heater.html) is retained as a test fixture so future changes can be checked against it. The old repository has been retired; no external scheduler is required by this application.
 
 ## Source layout
 
@@ -45,6 +46,11 @@ The operating rules and normal generated message were migrated from [carve-lab-h
 - `assets/gallery.js`: automatic photography and reduced-motion handling.
 - `assets/heater.js`: scheduling rules and WhatsApp URL preparation.
 - `assets/heater-ui.js`: the integrated heater form and copy/share actions.
+- `assets/receipt.js`: outlet business identities, validation, integer-sen totals and Malaysia date handling.
+- `assets/receipt-view.js`: escaped semantic screen/print receipt and safe download filenames.
+- `assets/receipt-pdf.js`: locally rendered multipage PDF download, with Unicode via browser fonts.
+- `assets/receipt-ui.js`: front-desk form, live preview, date override, PDF download and print actions.
+- `assets/vendor/`: pinned pdf-lib 1.17.1 and its MIT license, served locally.
 - `tests/heater.test.js`: scheduling, message compatibility, validation, and day-boundary checks.
 
 Module links use URL hashes, so bookmarked tools and browser Back/Forward work on GitHub Pages. Assets use relative paths for repository-based hosting. The stylesheet link includes a content-version query to refresh cached styling; update that version when changing the CSS.
@@ -54,6 +60,8 @@ Module links use URL hashes, so bookmarked tools and browser Back/Forward work o
 In GitHub Settings → Pages, choose **Deploy from a branch**, then **main**, **/ (root)**. `.nojekyll` keeps the static source unchanged.
 
 This is a public website and repository. Heater inputs stay in the current browser page; there is no database, account system, analytics, or automatic upload. WhatsApp receives a prepared message only when the user chooses **Open WhatsApp draft**. Nothing is sent automatically. The current phone default is preserved from the original public scheduler.
+
+Receipt input is kept only in page memory and files staff choose to download/print. No client details or purchase records are stored in browser storage, sent to a conversion service, or put in page URLs. Reloading clears the draft. PDF downloads contain high-resolution image pages; screen/print receipts use semantic HTML. This tool applies the requested 8% rate and is not a government e-Invoice integration. Company registration details are SSM numbers, not SST registration numbers. The supplied incorporation certificates are not published.
 
 The future finance page is a placeholder. No bank records or financial upload feature is included.
 

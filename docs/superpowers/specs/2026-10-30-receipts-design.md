@@ -71,7 +71,9 @@ The Receipt page has an outlet chooser, a clear form, and a paper-style receipt
 preview. On desktop the form and preview sit alongside each other; on phones
 they stack. Use the workspace's ivory, charcoal, and bronze palette, generous
 white space, and the existing fonts/wordmark. The downloaded receipt uses a white
-background, dark type, fine rules, and a restrained total block.
+background, dark type, fine bronze rules, paired issuer/client columns, a soft
+table header, an ivory total block, and a larger editorial receipt heading.
+This premium refinement was requested after the first PDF preview.
 
 Fields: outlet, receipt date, required client name, optional phone/email, and
 repeatable item rows with description, quantity, and price before SST. Blank

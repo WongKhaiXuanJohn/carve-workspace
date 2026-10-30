@@ -1,4 +1,10 @@
-import { formatMoney } from './receipt.js';
+import { formatMoney } from './receipt.js?v=d000e45b03';
+
+export function receiptRowChunk(lines, availableHeight) {
+  const count = availableHeight < 39 ? 0 : Math.max(0, Math.floor((availableHeight - 21) / 15));
+  const visible = lines.slice(0, count);
+  return { lines: visible, rest: lines.slice(count), height: visible.length ? Math.max(18, visible.length * 15) + 21 : 0 };
+}
 
 // Render locally at 216 dpi. System font fallback keeps multilingual names intact
 // without sending customer text to a conversion service or font provider.
@@ -30,6 +36,7 @@ export async function createReceiptPdf(receipt) {
   }
   function text(value, x, top, size = 10, options = {}) {
     font(size, options.bold);
+    if (options.display) ctx.font = `${size}px Diagramm, Arial, sans-serif`;
     ctx.fillStyle = options.color || '#302b25';
     ctx.textAlign = options.align || 'left';
     ctx.fillText(String(value), x, top);
@@ -62,13 +69,13 @@ export async function createReceiptPdf(receipt) {
     return top + wrapped.length * leading;
   }
   function tableHeader() {
-    rule(y);
-    y += 12;
+    ctx.fillStyle = '#f6f3ee'; ctx.fillRect(margin, y, right - margin, 33);
+    y += 11;
     text('ITEM', margin, y, 8, { color: '#897762' });
     text('QTY', 339, y, 8, { align: 'right', color: '#897762' });
     text('PRICE (MYR)', 436, y, 8, { align: 'right', color: '#897762' });
     text('AMOUNT (MYR)', right, y, 8, { align: 'right', color: '#897762' });
-    y += 23; rule(y); y += 16;
+    y += 22; y += 18;
   }
   function startPage(continued = false) {
     canvas = document.createElement('canvas');
@@ -77,23 +84,27 @@ export async function createReceiptPdf(receipt) {
     if (!ctx) throw new Error('PDF rendering is unavailable in this browser. Please use Print instead.');
     ctx.scale(scale, scale);
     ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, width, height);
-    ctx.drawImage(logo, margin, 42, 137, 137 / (logo.naturalWidth / logo.naturalHeight));
-    text(continued ? 'Receipt - continued' : 'Receipt', right, 42, continued ? 18 : 28, { align: 'right' });
-    text(receipt.dateLabel, right, 83, 10, { align: 'right', color: '#77695b' });
-    y = block(receipt.outlet.name, margin, 103, 300, 13, 18, { bold: true });
+    ctx.drawImage(logo, margin, 46, 145, 145 / (logo.naturalWidth / logo.naturalHeight));
+    text(continued ? 'Receipt - continued' : 'Receipt', right, 43, continued ? 23 : 38, { align: 'right', display: true });
+    text('RECEIPT DATE', right, 98, 7.5, { align: 'right', color: '#93816d' });
+    text(receipt.dateLabel, right, 114, 10, { align: 'right', color: '#615447' });
+    rule(143, '#b9a68e');
     if (!continued) {
-      y = block(receipt.outlet.company, margin, y + 6, 340, 10, 15, { bold: true });
-      y = block(`Co. Reg. No. ${receipt.outlet.registration}`, margin, y, 340, 9, 14, { color: '#77695b' });
-      y = block(receipt.outlet.address, margin, y + 5, 355, 9, 14, { color: '#77695b' });
-      y = block(`${receipt.outlet.phone}  |  ${receipt.outlet.email}`, margin, y + 4, 400, 9, 14, { color: '#77695b' });
-      rule(y + 17); y += 36;
-      text('RECEIVED FROM', margin, y, 8, { color: '#897762' });
-      y = block(receipt.clientName, margin, y + 18, right - margin, 13, 18, { bold: true });
-      for (const contact of [receipt.phone, receipt.email].filter(Boolean)) y = block(contact, margin, y + 4, right - margin, 10, 15);
-      y += 24;
+      const clientX = 355, businessWidth = 270, clientWidth = right - clientX;
+      text('ISSUED BY', margin, 167, 8, { color: '#93816d' });
+      let businessY = block(receipt.outlet.name, margin, 187, businessWidth, 13, 18, { bold: true });
+      businessY = block(receipt.outlet.company, margin, businessY + 10, businessWidth, 9, 14, { bold: true });
+      businessY = block(`Co. Reg. No. ${receipt.outlet.registration}`, margin, businessY + 2, businessWidth, 8, 13, { color: '#77695b' });
+      businessY = block(receipt.outlet.address, margin, businessY + 9, businessWidth, 9, 14, { color: '#77695b' });
+      businessY = block(`${receipt.outlet.phone}\n${receipt.outlet.email}`, margin, businessY + 9, businessWidth, 9, 14, { color: '#77695b' });
+      text('RECEIVED FROM', clientX, 167, 8, { color: '#93816d' });
+      let clientY = block(receipt.clientName, clientX, 187, clientWidth, 13, 18, { bold: true });
+      for (const contact of [receipt.phone, receipt.email].filter(Boolean)) clientY = block(contact, clientX, clientY + 8, clientWidth, 9, 14, { color: '#77695b' });
+      y = Math.max(businessY, clientY) + 34;
     } else {
-      y = block(receipt.clientName, margin, y + 8, right - margin, 10, 15);
-      y += 18;
+      y = block(receipt.outlet.name, margin, 166, right - margin, 11, 16, { bold: true });
+      y = block(receipt.clientName, margin, y + 8, right - margin, 9, 14, { color: '#77695b' });
+      y += 24;
     }
     tableHeader();
     pageIndex++;
@@ -109,25 +120,35 @@ export async function createReceiptPdf(receipt) {
   }
   startPage();
   for (const item of receipt.items) {
-    const description = lines(item.description, 255, 10);
-    const rowHeight = Math.max(18, description.length * 15) + 21;
-    if (y + rowHeight > height - 75) { await finishPage(); startPage(true); }
-    description.forEach((line, index) => text(line, margin, y + index * 15, 10));
-    text(item.quantity, 339, y, 10, { align: 'right' });
-    text(formatMoney(item.unitSen), 436, y, 10, { align: 'right' });
-    text(formatMoney(item.amountSen), right, y, 10, { align: 'right' });
-    y += rowHeight; rule(y - 10);
+    let remaining = lines(item.description, 255, 10), firstChunk = true;
+    while (remaining.length) {
+      const chunk = receiptRowChunk(remaining, height - 75 - y);
+      if (!chunk.lines.length) { await finishPage(); startPage(true); continue; }
+      chunk.lines.forEach((line, index) => text(line, margin, y + index * 15, 10));
+      if (firstChunk) {
+        text(item.quantity, 339, y, 10, { align: 'right' });
+        text(formatMoney(item.unitSen), 436, y, 10, { align: 'right' });
+        text(formatMoney(item.amountSen), right, y, 10, { align: 'right' });
+      }
+      y += chunk.height; rule(y - 10);
+      remaining = chunk.rest; firstChunk = false;
+      if (remaining.length) { await finishPage(); startPage(true); }
+    }
   }
-  if (y + 153 > height - 75) { await finishPage(); startPage(true); }
+  if (y + 190 > height - 75) { await finishPage(); startPage(true); }
   y += 15;
   const labelX = 310;
   for (const [label, amount] of [['Subtotal', receipt.subtotalSen], ['SST (8%)', receipt.taxSen]]) {
-    text(label, labelX, y, 10); text(`RM ${formatMoney(amount)}`, right, y, 10, { align: 'right' }); y += 25;
+    text(label, labelX + 14, y, 10, { color: '#77695b' }); text(`RM ${formatMoney(amount)}`, right - 14, y, 10, { align: 'right' }); y += 26;
   }
-  rule(y + 1, '#a08c74'); y += 17;
-  text('Total', labelX, y, 15, { bold: true });
-  text(`RM ${formatMoney(receipt.totalSen)}`, right, y, 15, { bold: true, align: 'right' });
-  y += 52; text('Thank you for moving with us.', margin, y, 10, { color: '#77695b' });
+  ctx.fillStyle = '#f2ece3'; ctx.fillRect(labelX, y + 4, right - labelX, 52);
+  text('Total', labelX + 14, y + 24, 11, { bold: true });
+  const totalText = `RM ${formatMoney(receipt.totalSen)}`;
+  let totalSize = 21;
+  font(totalSize, true);
+  while (ctx.measureText(totalText).width > right - labelX - 80 && totalSize > 11) { totalSize -= .5; font(totalSize, true); }
+  text(totalText, right - 14, y + 20, totalSize, { bold: true, align: 'right' });
+  y += 100; text('Thank you for moving with us.', margin, y, 16, { color: '#615447', display: true });
   await finishPage();
   return pdf.save();
 }

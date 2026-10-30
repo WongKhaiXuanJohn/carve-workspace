@@ -1,6 +1,7 @@
-import { modules, moduleForHash } from './modules.js';
+import { modules, moduleForHash } from './modules.js?v=1096f3594a';
 import { initGallery } from './gallery.js';
 import { initHeater } from './heater-ui.js?v=27531b6212';
+import { initReceipt } from './receipt-ui.js?v=7412f3e918';
 
 const side = document.getElementById('sidebar');
 const menu = document.getElementById('menu');
@@ -56,6 +57,7 @@ function renderRoute(focusHeading = true) {
   document.getElementById('breadcrumb').textContent = `Workspace / ${module.label}`;
   document.title = `${module.label} · Carve Workspace`;
   gallery.setActive(module.id === 'home');
+  if (module.id === 'receipt') receipt.refreshDate();
   setMenu(false);
   if (focusHeading) {
     const heading = document.querySelector(`#${module.id} h1`);
@@ -98,4 +100,5 @@ document.getElementById('workspace-date').textContent = new Intl.DateTimeFormat(
   timeZone: 'Asia/Kuala_Lumpur', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
 }).format(new Date());
 initHeater(document.getElementById('heater'));
+const receipt = initReceipt(document.getElementById('receipt'));
 renderRoute(false);
