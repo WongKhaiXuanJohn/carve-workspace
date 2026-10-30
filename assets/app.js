@@ -1,6 +1,6 @@
 import { modules, moduleForHash } from './modules.js';
 import { initGallery } from './gallery.js';
-import { initHeater } from './heater-ui.js';
+import { initHeater } from './heater-ui.js?v=27531b6212';
 
 const side = document.getElementById('sidebar');
 const menu = document.getElementById('menu');

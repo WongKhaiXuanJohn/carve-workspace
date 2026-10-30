@@ -32,6 +32,7 @@ npm test
 - For classes exactly one hour apart, the last two rows switch on five minutes before the next class.
 - Shutdown is 35 minutes after the start, except starts from noon through 3 PM inclusive, which use 30 minutes.
 - If another class immediately follows, switch off the last two rows; otherwise switch off all.
+- Class fields automatically sort from earliest to latest when a time edit is completed, with unfinished entries kept last.
 - Classes must start at least 60 minutes apart. Events crossing midnight explicitly identify the adjacent day.
 
 The operating rules and normal generated message were migrated from [carve-lab-heater-scheduler](https://github.com/WongKhaiXuanJohn/carve-lab-heater-scheduler), commit `cb60d1ee2ff6f06cbe6e84f2626108b980314df9`. The original is retained as a test fixture so future changes can be checked against it. No external scheduler is required by this application.
